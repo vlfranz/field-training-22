@@ -1,0 +1,10 @@
+# mac OS
+
+.DS_Store
+
+# python stuff
+__pycache__/
+
+
+# config files
+neo4j_conf.json

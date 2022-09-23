@@ -1,0 +1,54 @@
+The data:
+
+                https://github.com/neo4j-field/field-meet-boston-2022-ps
+
+ 
+
+This repo contains the data set.
+
+ 
+
+Data-1000 contains the 1,000 patients data.
+
+Data-10000 contains the 10,000 patients data.
+
+ 
+
+https://github.com/neo4j-field/field-meet-boston-2022-ps/blob/main/csv-data-dictionary.md
+
+ 
+
+This URL contains the data dictionary.
+
+ 
+
+Tech Stack :
+
+Java
+Python
+Javascript
+.Net
+Spring Data
+GraphQL
+ 
+
+Choose one of the tech stack to implement the solution. UI is optional.
+
+There should be a rest endpoint to be able to invoke core operations.
+
+ 
+
+Build the Data model. The data dictionary and data is in github.
+This is the synthetic patient data set created using Synthea.
+You can work with 1,000 patients data set or 10,000 patients data set or both.
+
+Do the initial batch data load using the technology chosen.
+
+Build API endpoints to query the graph for these aspects.
+For a given patient(s) what are all the prescriptions available.
+How many patients are prescribed the given drug(s).
+After drug 1, how many patients had drug 2 prescribed.
+
+Build API end points to add/update/delete data. Not batch mode. One record at a time is fine. 
+
+Anything else you would like o showcase the tech stack efficiency.

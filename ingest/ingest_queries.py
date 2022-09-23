@@ -1,0 +1,53 @@
+synthea_queries = {
+    "patients.csv" : {
+        "nodes":("""
+        MERGE (p:Patient {id: row.Id})
+        ON CREATE SET p.birthDate = row.BIRTHDATE,
+        p.deathDate = row.deathDate,
+        p.ssn = row.SSN,
+        p.passportNumber = row.PASSPORT,
+        p.namePrefix = row.PREFIX,
+        p.firstName = row.FIRST,
+        p.lastName = row.LAST,
+        p.nameSuffix = row.SUFFIX,
+        p.maidenName = row.MAIDEN,
+        p.maritalStatus = row.MARITAL,
+        p.race = row.RACE,
+        p.ethnicity = row.ETHNICITY,
+        p.gender = row.GENDER,
+        p.birthPlace = row.BIRTHPLACE,
+        p.address = row.ADDRESS,
+        p.city = row.CITY,
+        p.state = row.STATE,
+        p.county = row.COUNTY,
+        p.zip = row.ZIP,
+        p.lat = row.LAT,
+        p.long = row.LONG,
+        p.healthcareExpenses = row.HEALTHCARE_EXPENSES,
+        p.healthcareCoverage = row.HEALTHCARE_COVERAGE
+        ON MATCH SET p.birthDate = row.BIRTHDATE,
+        p.deathDate = row.deathDate,
+        p.ssn = row.SSN,
+        p.passportNumber = row.PASSPORT,
+        p.namePrefix = row.PREFIX,
+        p.firstName = row.FIRST,
+        p.lastName = row.LAST,
+        p.nameSuffix = row.SUFFIX,
+        p.maidenName = row.MAIDEN,
+        p.maritalStatus = row.MARITAL,
+        p.race = row.RACE,
+        p.ethnicity = row.ETHNICITY,
+        p.gender = row.GENDER,
+        p.birthPlace = row.BIRTHPLACE,
+        p.address = row.ADDRESS,
+        p.city = row.CITY,
+        p.state = row.STATE,
+        p.county = row.COUNTY,
+        p.zip = row.ZIP,
+        p.lat = row.LAT,
+        p.long = row.LONG,
+        p.healthcareExpenses = row.HEALTHCARE_EXPENSES,
+        p.healthcareCoverage = row.HEALTHCARE_COVERAGE
+        """,)
+    }
+}
