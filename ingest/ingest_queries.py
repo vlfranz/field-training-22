@@ -2,7 +2,7 @@ synthea_queries = {
     "patients.csv" : {
         "nodes":("""
         MERGE (p:Patient {id: row.Id})
-        ON CREATE SET p.birthDate = row.BIRTHDATE,
+        ON CREATE SET p.birthDate = datetime(row.BIRTHDATE),
         p.deathDate = row.deathDate,
         p.ssn = row.SSN,
         p.passportNumber = row.PASSPORT,
@@ -25,7 +25,7 @@ synthea_queries = {
         p.long = row.LONG,
         p.healthcareExpenses = row.HEALTHCARE_EXPENSES,
         p.healthcareCoverage = row.HEALTHCARE_COVERAGE
-        ON MATCH SET p.birthDate = row.BIRTHDATE,
+        ON MATCH SET p.birthDate = datetime(row.BIRTHDATE),
         p.deathDate = row.deathDate,
         p.ssn = row.SSN,
         p.passportNumber = row.PASSPORT,
@@ -55,7 +55,7 @@ synthea_queries = {
             """
             MERGE (e:Encounter {id: row.Id})
             ON CREATE SET 
-            e.startDateTime = row.START,
+            e.startDateTime = datetime(row.START),
             e.endDateTime = row.STOP,
             e.encounterClass = row.ENCOUNTERCLASS,
             e.code = row.CODE,
@@ -66,7 +66,7 @@ synthea_queries = {
             e.reasonCode = row.REASONCODE,
             e.reasonDescription = row.REASONDESCRIPTION
             ON MATCH SET
-            e.startDateTime = row.START,
+            e.startDateTime = datetime(row.START),
             e.endDateTime = row.STOP,
             e.encounterClass = row.ENCOUNTERCLASS,
             e.code = row.CODE,

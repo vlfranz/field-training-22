@@ -48,6 +48,22 @@ class SyntheaDataIngester:
                     session.run(relationship_query)
             print("Finished writing rels.")
 
+    def create_encounter_chains(self):
+        query_args = {"batch_size": self.batch_size}
+        encounter_chain_query = """
+        MATCH (p:Patient)
+        CALL {{
+            WITH p
+            MATCH (p)-[:HAD]->(e:Encounter)
+            WITH e
+            ORDER BY e.startDateTime
+            WITH collect(e) AS es
+            CALL apoc.nodes.link(es, "HAS_NEXT")
+        }} IN TRANSACTIONS OF {batch_size} ROWS
+        """.format(**query_args)
+        with self.driver.session(database=self.database) as session:
+            session.run(encounter_chain_query)
+
     def close(self):
         self.driver.close()
 
@@ -59,6 +75,7 @@ def main():
     ingester = SyntheaDataIngester(neo4j_conf, synthea_queries, schema_statements)
     ingester.create_indexes()
     ingester.batch_data_load()
+    ingester.create_encounter_chains()
     ingester.close()
 
 
