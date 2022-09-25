@@ -1,4 +1,20 @@
 schema_statements = (
     """CREATE CONSTRAINT patient_id IF NOT EXISTS FOR (p:Patient) REQUIRE (p.id) IS NODE KEY;""",
-    """CREATE CONSTRAINT encounter_id IF NOT EXISTS FOR (e:Encounter) REQUIRE (e.id) IS NODE KEY;"""
+    """CREATE CONSTRAINT encounter_id IF NOT EXISTS FOR (e:Encounter) REQUIRE (e.id) IS NODE KEY;""",
+    """CREATE CONSTRAINT organization_id IF NOT EXISTS FOR (o:Organization) REQUIRE (o.id) IS NODE KEY;""",
+    """CREATE CONSTRAINT payer_id IF NOT EXISTS FOR (p:Payer) REQUIRE (p.id) IS NODE KEY;""",
+    """CREATE CONSTRAINT provider_id IF NOT EXISTS FOR (p:Provider) REQUIRE (p.id) IS NODE KEY;""",
+    """CREATE CONSTRAINT allergy_code IF NOT EXISTS FOR (a:Allergy) REQUIRE (a.code) IS NODE KEY;""",
+    """CREATE CONSTRAINT careplan_id IF NOT EXISTS FOR (c:CarePlan) REQUIRE (c.id) IS NODE KEY;""",
+    """CREATE CONSTRAINT claim_id IF NOT EXISTS FOR (c:Claim) REQUIRE (c.id) IS NODE KEY;""",
+    """CREATE CONSTRAINT condition_code IF NOT EXISTS FOR (c:Condition) REQUIRE (c.code) IS NODE KEY;""",
+    """CREATE CONSTRAINT device_code IF NOT EXISTS FOR (d:Device) REQUIRE (d.code) IS NODE KEY;""",
+    """CREATE CONSTRAINT imagingstudy_id IF NOT EXISTS FOR (i:ImagingStudy) REQUIRE (i.id) IS NODE KEY;""",
+    """CREATE CONSTRAINT immunization_code IF NOT EXISTS FOR (i:Immunization) REQUIRE (i.code) IS NODE KEY;""",
+    """CREATE CONSTRAINT medication_code IF NOT EXISTS FOR (m:Medication) REQUIRE (m.code) IS NODE KEY;""",
+    """CREATE CONSTRAINT organization_id IF NOT EXISTS FOR (o:Organization) REQUIRE (o.id) IS NODE KEY;""",
+    """CREATE CONSTRAINT insurancecoverageperiod_id IF NOT EXISTS FOR (i:InsuranceCoveragePeriod) REQUIRE (i.patient, i.payer, i.startYear, i.endYear) IS NODE KEY;""",
+    """CREATE CONSTRAINT procedure_code IF NOT EXISTS FOR (p:Procedure) REQUIRE (p.code) IS NODE KEY;""",
+    """CREATE CONSTRAINT provider_id IF NOT EXISTS FOR (p:Provider) REQUIRE (p.id) IS NODE KEY;""",
+    """CREATE CONSTRAINT supply_code IF NOT EXISTS FOR (s:Supply) REQUIRE (s.code) IS NODE KEY;""",
 )

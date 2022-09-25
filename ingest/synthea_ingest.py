@@ -38,14 +38,14 @@ class SyntheaDataIngester:
                 query_args = {"file": file_path, "query_body": query, "batch_size": self.batch_size}
                 node_query = ingest_query.format(**query_args)
                 with self.driver.session(database=self.database) as session:
-                    session.run(node_query, parameters=query_args)
+                    session.run(node_query)
             print("Finished Writing Nodes")
             
-            for query in query_dict.get("rels", []):
+            for query in query_dict.get("relationships", []):
                 query_args = {"file": file_path, "query_body": query, "batch_size": self.batch_size}
-                node_query = ingest_query.format(**query_args)
+                relationship_query = ingest_query.format(**query_args)
                 with self.driver.session(database=self.database) as session:
-                    session.run(node_query, parameters=query_args)
+                    session.run(relationship_query)
             print("Finished writing rels.")
 
     def close(self):
