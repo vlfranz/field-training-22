@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from neomodel import config
 
+import json
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -76,7 +77,11 @@ WSGI_APPLICATION = 'syntheaapi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-config.DATABASE_URL = 'bold://neo4j:synthea@localhost:7687'
+f = open('neo4j_conf.json')
+neo4j_conf = json.load(f)
+f.close()
+
+config.DATABASE_URL = f'bolt://{neo4j_conf["user"]}:{neo4j_conf["password"]}@localhost:7687'
 
 
 
