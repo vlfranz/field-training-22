@@ -5,6 +5,16 @@
 # python stuff
 __pycache__/
 
-
 # config files
 neo4j_conf.json
+
+# Django 
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media
+
+# vs code
+.vscode/*
+
