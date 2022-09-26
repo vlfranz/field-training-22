@@ -251,17 +251,14 @@ synthea_queries = {
             MERGE (c)-[:HAS_SECONDARY]->(p2)
             """,
         ),
-        "conditions.csv" : {
+    },
+    "conditions.csv" : {
             "nodes" : (
                 """
-                MERGE (c:Condition {c.code: row.CODE})
+                MERGE (c:Condition {code: row.CODE})
                 ON CREATE SET
-                c.diagnoseDate = row.START,
-                c.resolveDate = row.STOP,
                 c.description = row.DESCRIPTION
                 ON MATCH SET
-                c.diagnoseDate = row.START,
-                c.resolveDate = row.STOP,
                 c.description = row.DESCRIPTION
 
                 MERGE (e:Encounter {id: row.ENCOUNTER})
@@ -271,22 +268,24 @@ synthea_queries = {
                 """
                 MATCH (e:Encounter {id: row.ENCOUNTER})
                 MATCH (c:Condition {code: row.CODE})
-                MERGE (c)-[:DIAGNOSED_AT]->(e)
+                MERGE (c)-[r:DIAGNOSED_AT]->(e)
+                ON CREATE SET
+                r.diagnoseDate = row.START,
+                r.resolveDate = row.STOP
+                ON MATCH SET
+                r.diagnoseDate = row.START,
+                r.resolveDate = row.STOP
                 """,
             )
-        },
-        "devices.csv" : {
+    },
+    "devices.csv" : {
             "nodes" : (
                 """
                 MERGE (d:Device {code: row.CODE})
                 ON CREATE SET
-                d.startDate = row.START,
-                d.endDate = row.STOP,
                 d.description = row.DESCRIPTION,
                 d.udi = row.UDI
                 ON MATCH SET
-                d.startDate = row.START,
-                d.endDate = row.STOP,
                 d.description = row.DESCRIPTION,
                 d.udi = row.UDI
 
@@ -297,11 +296,17 @@ synthea_queries = {
                 """
                 MATCH (d:Device {code: row.CODE})
                 MATCH (e:Encounter {id: row.ENCOUNTER})
-                MERGE (d)-[:ASSOCIATED_AT]->(e)
+                MERGE (d)-[r:ASSOCIATED_AT]->(e)
+                ON CREATE SET
+                r.startDate = row.START,
+                r.endDate = row.STOP
+                ON MATCH SET
+                r.startDate = row.START,
+                r.endDate = row.STOP
                 """,
             )
-        },
-        "imaging_studies.csv" : {
+    },
+    "imaging_studies.csv" : {
             "nodes" : (
                 """
                 MERGE (i:ImagingStudy {id: row.Id})
@@ -338,19 +343,15 @@ synthea_queries = {
                 MERGE (i)-[:CONDUCTED_AT]->(e)
                 """,
             )
-        },
-        "immunizations.csv" : {
+    },
+    "immunizations.csv" : {
             "nodes" : (
                 """
                 MERGE (i:Immunization {code: row.CODE})
                 ON CREATE SET
-                i.date = row.DATE,
-                i.description = row.DESCRIPTION,
-                i.cost = row.COST
+                i.description = row.DESCRIPTION
                 ON MATCH SET
-                i.date = row.DATE,
-                i.description = row.DESCRIPTION,
-                i.cost = row.COST
+                i.description = row.DESCRIPTION
 
                 MERGE (e:Encounter {id: row.ENCOUNTER})
                 """,
@@ -359,35 +360,24 @@ synthea_queries = {
                 """
                 MATCH (i:Immunization {code: row.CODE})
                 MATCH (e:Encounter {id: row.ENCOUNTER})
-                MERGE (i)-[:ADMINISTERED_AT]->(e)
+                MERGE (i)-[r:ADMINISTERED_AT]->(e)
+                ON CREATE SET
+                r.date = row.DATE,
+                r.cost = row.COST
+                ON MATCH SET
+                r.date = row.DATE,
+                r.cost = row.COST
                 """,
             )
-        },
     },
     "medications.csv" : {
         "nodes" : (
             """
             MERGE (m:Medication {code: row.CODE})
             ON CREATE SET 
-            m.prescriptionStartDate = row.START,
-            m.prescriptionEndDate = row.STOP,
-            m.description = row.DESCRIPTION,
-            m.baseCost = row.BASE_COST,
-            m.payerCoverage = row.PAYER_COVERAGE,
-            m.timesDispensed = row.DISPENSES,
-            m.totalCost = row.TOTALCOST,
-            m.reasonCode = row.REASONCODE,
-            m.reasonDescription = row.REASONDESCRIPTION
+            m.description = row.DESCRIPTION
             ON MATCH SET
-            m.prescriptionStartDate = row.START,
-            m.prescriptionEndDate = row.STOP,
-            m.description = row.DESCRIPTION,
-            m.baseCost = row.BASE_COST,
-            m.payerCoverage = row.PAYER_COVERAGE,
-            m.timesDispensed = row.DISPENSES,
-            m.totalCost = row.TOTALCOST,
-            m.reasonCode = row.REASONCODE,
-            m.reasonDescription = row.REASONDESCRIPTION
+            m.description = row.DESCRIPTION
 
             MERGE (e:Encounter {id: row.ENCOUNTER})
 
@@ -398,12 +388,32 @@ synthea_queries = {
             """
             MATCH (m:Medication {code: row.CODE})
             MATCH (e:Encounter {id: row.ENCOUNTER})
-            MERGE (m)-[:PRESCRIBED_AT]->(e)
+            MERGE (m)-[r:PRESCRIBED_AT]->(e)
+            ON CREATE SET 
+            r.prescriptionStartDate = row.START,
+            r.prescriptionEndDate = row.STOP,
+            r.reasonCode = row.REASONCODE,
+            r.reasonDescription = row.REASONDESCRIPTION,
+            r.timesDispensed = row.DISPENSES
+            ON MATCH SET 
+            r.prescriptionStartDate = row.START,
+            r.prescriptionEndDate = row.STOP,
+            r.reasonCode = row.REASONCODE,
+            r.reasonDescription = row.REASONDESCRIPTION,
+            r.timesDispensed = row.DISPENSES
 
             WITH m, row
 
             MATCH (pyr:Payer {id: row.PAYER})
-            MERGE (m)-[:PAID_FOR_BY]->(pyr)
+            MERGE (m)-[r2:PAID_FOR_BY]->(pyr)
+            ON CREATE SET
+            r2.baseCost = row.BASE_COST,
+            r2.payerCoverage = row.PAYER_COVERAGE,
+            r2.totalCost = row.TOTALCOST
+            ON MATCH SET
+            r2.baseCost = row.BASE_COST,
+            r2.payerCoverage = row.PAYER_COVERAGE,
+            r2.totalCost = row.TOTALCOST
             """,
         )
     },
@@ -525,19 +535,9 @@ synthea_queries = {
             """
             MERGE (p:Procedure {code: row.CODE})
             ON CREATE SET
-            p.startDateTime = row.START,
-            p.stopDateTime = row.STOP,
-            p.description = row.DESCRIPTION,
-            p.baseCost = row.BASE_COST,
-            p.reasonCode = row.REASONCODE,
-            p.reasonDescription = row.REASONDESCRIPTION
+            p.description = row.DESCRIPTION
             ON MATCH SET
-            p.startDateTime = row.START,
-            p.stopDateTime = row.STOP,
-            p.description = row.DESCRIPTION,
-            p.baseCost = row.BASE_COST,
-            p.reasonCode = row.REASONCODE,
-            p.reasonDescription = row.REASONDESCRIPTION
+            p.description = row.DESCRIPTION
 
             MERGE (e:Encounter {id: row.ENCOUNTER})
             """,
@@ -546,7 +546,19 @@ synthea_queries = {
             """
             MATCH (p:Procedure {code: row.CODE})
             MATCH (e:Encounter {id: row.ENCOUNTER})
-            MERGE (p)-[:PERFORMED_AT]->(e)
+            MERGE (p)-[r:PERFORMED_AT]->(e)
+            ON CREATE SET
+            r.startDateTime = row.START,
+            r.stopDateTime = row.STOP,
+            r.reasonCode = row.REASONCODE,
+            r.reasonDescription = row.REASONDESCRIPTION,
+            r.baseCost = row.BASE_COST
+            ON MATCH SET 
+            r.startDateTime = row.START,
+            r.stopDateTime = row.STOP,
+            r.reasonCode = row.REASONCODE,
+            r.reasonDescription = row.REASONDESCRIPTION,
+            r.baseCost = row.BASE_COST
             """,
         )
     },
@@ -592,14 +604,10 @@ synthea_queries = {
         "nodes" : {
             """
             MERGE (s:Supply {code: row.CODE})
-            ON CREATE SET 
-            s.useDate = row.DATE,
-            s.description = row.DESCRIPTION,
-            s.quantity = row.QUANTITY
+            ON CREATE SET
+            s.description = row.DESCRIPTION
             ON MATCH SET
-            s.useDate = row.DATE,
-            s.description = row.DESCRIPTION,
-            s.quantity = row.QUANTITY
+            s.description = row.DESCRIPTION
 
             MERGE (e:Encounter {id: row.ENCOUNTER})
             """,
@@ -608,7 +616,13 @@ synthea_queries = {
             """
             MATCH (s:Supply {code: row.CODE})
             MATCH (e:Encounter {id: row.ENCOUNTER})
-            MERGE (s)-[:USED_AT]->(e)
+            MERGE (s)-[r:USED_AT]->(e)
+            ON CREATE SET
+            r.useDate = row.DATE,
+            r.quantity = row.QUANTITY
+            ON MATCH SET
+            r.useDate = row.DATE,
+            r.quantity = row.QUANTITY
             """,
         }
     }
